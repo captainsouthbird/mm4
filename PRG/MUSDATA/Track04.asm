@@ -1,0 +1,517 @@
+	.byte $00	; Music header tag
+	sda1 Track_04_SQ1	; Square 1
+	sda1 Track_04_SQ2	; Square 2
+	sda1 Track_04_TRI	; Triangle
+	sda1 Track_04_NSE	; Noise
+
+Track_04_SQ1:
+	.byte MCMD_GLOBAL_TRANSPOSE_SET, $FF
+	.byte MCMD_DUTYCYCLE_SET, $80
+	.byte MCMD_TEMPO_SET, $02, $2E
+	.byte MCMD_NOTEATTACKLEN_SET, $8C
+	.byte MCMD_SYNTH_VOLUME_SET, $0B
+	.byte MCMD_PATCH_SET, $02
+	.byte MCMD_OCTAVE_SET, $01
+	.byte MCMD_TOGGLE_SINE_RESET
+	.byte MCMD_TOGGLE_OCTAVE_HIGH
+	.byte $ED, $ED
+	.byte MCMD_PATCH_SET, $03
+	.byte MCMD_SET_1_5X_TIMING
+	.byte $CD
+	.byte MCMD_TOGGLE_SINE_RESET
+	.byte $8D, $8B
+	.byte MCMD_PATCH_SET, $02
+	.byte MCMD_SET_1_5X_TIMING
+	.byte $CD
+	.byte MCMD_TOGGLE_TIME_SEL
+	.byte $41, $43, $45, $46, $48, $4A, $4C, $4D, $4F, $51, $52
+	.byte MCMD_OCTAVE_SET, $02
+	.byte $4D
+Track_04_SQ1_05:	; 9BCE
+
+	.byte MCMD_TRACK_CONFIG, $00
+
+Track_04_SQ1_01:	; 9BD0
+	.byte MCMD_TRACK_CONFIG, $00
+	.byte MCMD_GLOBAL_TRANSPOSE_SET, $FF
+	.byte MCMD_NOTEATTACKLEN_SET, $6E
+	.byte MCMD_PATCH_SET, $02
+	.byte MCMD_DUTYCYCLE_SET, $C0
+	.byte $80, $99, $99, $99, $9C, $99, $80, $99, $80, $99, $80, $9C, $99, $99, $9B, $9C
+	.byte MCMD_LOOPCNT0_JMPLAST_CFG, $00
+	sda1 Track_04_SQ1_00
+	.byte $9C, $9B, $99, $5A
+	.byte MCMD_TOGGLE_SINE_RESET
+	.byte $9B
+	.byte MCMD_SET_1_5X_TIMING
+	.byte MCMD_TOGGLE_SINE_RESET
+	.byte $7B, $99, $97
+	.byte MCMD_TOGGLE_SINE_RESET
+	.byte $99, $D9
+	.byte MCMD_NOTEATTACKLEN_SET, $F0
+	.byte MCMD_PATCH_SET, $03
+	.byte MCMD_TOGGLE_SINE_RESET
+	.byte $D9
+	.byte MCMD_LOOPCNT0_INIT_UPDATE, $01
+	sda1 Track_04_SQ1_01
+
+Track_04_SQ1_00:	; 9C06
+	.byte $80, $9B, $9C, $9B
+	.byte MCMD_TOGGLE_TIME_SEL
+	.byte $BE, $BB, $B7
+	.byte MCMD_NOTEATTACKLEN_SET, $96
+	.byte MCMD_TOGGLE_TIME_SEL
+	.byte MCMD_TOGGLE_SINE_RESET
+	.byte $D9
+	.byte MCMD_SYNTH_VOLUME_SET, $09
+	.byte MCMD_PATCH_SET, $03
+	.byte $D9
+	.byte MCMD_SYNTH_VOLUME_SET, $07
+	.byte MCMD_TOGGLE_SINE_RESET
+	.byte $D9, $C0, $E0
+	.byte MCMD_SYNTH_VOLUME_SET, $0B
+	.byte MCMD_PATCH_SET, $02
+	.byte $80
+	.byte MCMD_TOGGLE_TIME_SEL
+	.byte $5F
+	.byte MCMD_TOGGLE_OCTAVE_HIGH
+	.byte $A8
+	.byte MCMD_TOGGLE_TIME_SEL
+	.byte $68, $88
+	.byte MCMD_TOGGLE_TIME_SEL
+	.byte $A8, $A8, $A8
+	.byte MCMD_NOTEATTACKLEN_SET, $F0
+	.byte MCMD_TOGGLE_TIME_SEL
+	.byte MCMD_TOGGLE_SINE_RESET
+	.byte $C8
+	.byte MCMD_PATCH_SET, $03
+	.byte MCMD_TOGGLE_SINE_RESET
+	.byte $C8
+	.byte MCMD_PATCH_SET, $02
+	.byte MCMD_NOTEATTACKLEN_SET, $8C
+	.byte $80, $47
+	.byte MCMD_TOGGLE_SINE_RESET
+	.byte $88
+	.byte MCMD_SET_1_5X_TIMING
+	.byte MCMD_TOGGLE_SINE_RESET
+	.byte $68, $86, $84, $83, $A1
+	.byte MCMD_SET_1_5X_TIMING
+	.byte $83, $61, $80
+	.byte MCMD_TOGGLE_OCTAVE_HIGH
+	.byte $97
+	.byte MCMD_SET_1_5X_TIMING
+	.byte $9C, $7B, $80, $97, $F9
+Track_04_SQ1_04:	; 9C52
+
+	.byte MCMD_TRACK_CONFIG, $00
+
+Track_04_SQ1_02:	; 9C54
+	.byte MCMD_TRACK_CONFIG, $00
+	.byte MCMD_GLOBAL_TRANSPOSE_SET, $FD
+	.byte MCMD_PATCH_SET, $02
+	.byte MCMD_NOTEATTACKLEN_SET, $64
+	.byte MCMD_DUTYCYCLE_SET, $C0
+	.byte $7B
+	.byte MCMD_FREQOFFSET_SET, $00
+	.byte $7B, $60, $7B, $7E, $60
+	.byte MCMD_TOGGLE_OCTAVE_HIGH
+	.byte $6A, $80
+	.byte MCMD_NOTEATTACKLEN_SET, $C8
+	.byte MCMD_TOGGLE_SINE_RESET
+	.byte $AF
+	.byte MCMD_PATCH_SET, $03
+	.byte MCMD_SET_1_5X_TIMING
+	.byte MCMD_TOGGLE_SINE_RESET
+	.byte $8F
+	.byte MCMD_LOOPCNT0_INIT_UPDATE, $01
+	sda1 Track_04_SQ1_02
+	.byte MCMD_LOOPCNT1_JMPLAST_CFG, $08
+	sda1 Track_04_SQ1_03
+	.byte MCMD_PATCH_SET, $02
+	.byte MCMD_NOTEATTACKLEN_SET, $64
+	.byte $65, $65, $60, $65, $A8
+	.byte MCMD_TOGGLE_TIME_SEL
+	.byte $A5, $A5, $A5
+	.byte MCMD_DUTYCYCLE_SET, $80
+	.byte MCMD_NOTEATTACKLEN_SET, $46
+	.byte MCMD_TOGGLE_TIME_SEL
+	.byte $68, $66, $65, $63, $66, $65, $63, $61
+	.byte MCMD_NOTEATTACKLEN_SET, $C8
+	.byte $C3
+	.byte MCMD_LOOPCNT1_INIT_UPDATE, $01
+	sda1 Track_04_SQ1_04
+
+Track_04_SQ1_03:	; 9C9B
+	.byte MCMD_NOTEATTACKLEN_SET, $64
+	.byte $71, $71, $60, $71, $B1
+	.byte MCMD_TOGGLE_TIME_SEL
+	.byte $B1, $AF, $AD
+	.byte MCMD_NOTEATTACKLEN_SET, $FF
+	.byte MCMD_TOGGLE_TIME_SEL
+	.byte $EF
+	.byte MCMD_JUMP_ALWAYS
+	sda1 Track_04_SQ1_05
+	.byte MCMD_TRACK_STOP
+
+
+Track_04_SQ2:
+	.byte MCMD_FREQFINEOFFSET_SET, $02
+	.byte MCMD_DUTYCYCLE_SET, $80
+	.byte MCMD_NOTEATTACKLEN_SET, $FA
+	.byte MCMD_SYNTH_VOLUME_SET, $0A
+	.byte MCMD_PATCH_SET, $02
+	.byte MCMD_OCTAVE_SET, $01
+
+Track_04_SQ2_06:	; 9CBA
+	.byte MCMD_TRACK_CONFIG, $08
+	.byte $68
+	.byte MCMD_LOOPCNT0_INIT_UPDATE, $0F
+	sda1 Track_04_SQ2_06
+
+Track_04_SQ2_07:	; 9CC1
+	.byte MCMD_TRACK_CONFIG, $08
+	.byte $69
+	.byte MCMD_LOOPCNT0_INIT_UPDATE, $0F
+	sda1 Track_04_SQ2_07
+
+Track_04_SQ2_08:	; 9CC8
+	.byte MCMD_TRACK_CONFIG, $08
+	.byte $6B
+	.byte MCMD_LOOPCNT0_INIT_UPDATE, $0F
+	sda1 Track_04_SQ2_08
+
+Track_04_SQ2_09:	; 9CCF
+	.byte MCMD_TRACK_CONFIG, $08
+	.byte MCMD_NOTEATTACKLEN_SET, $8C
+	.byte $6D
+	.byte MCMD_LOOPCNT0_INIT_UPDATE, $0B
+	sda1 Track_04_SQ2_09
+	.byte $A0
+Track_04_SQ2_0F:	; 9CD9
+
+	.byte MCMD_TRACK_CONFIG, $00
+
+Track_04_SQ2_0B:	; 9CDB
+	.byte MCMD_TRACK_CONFIG, $00
+	.byte MCMD_PATCH_SET, $02
+	.byte MCMD_DUTYCYCLE_SET, $C0
+	.byte MCMD_NOTEATTACKLEN_SET, $6E
+	.byte $80, $9C, $9C, $9C
+	.byte MCMD_TOGGLE_OCTAVE_HIGH
+	.byte $88, $84, $80, $84, $80, $84, $80, $88, $84, $84, $86, $88
+	.byte MCMD_LOOPCNT0_JMPLAST_CFG, $08
+	sda1 Track_04_SQ2_0A
+	.byte $88, $86, $84, $45
+	.byte MCMD_TOGGLE_SINE_RESET
+	.byte $86
+	.byte MCMD_SET_1_5X_TIMING
+	.byte MCMD_TOGGLE_SINE_RESET
+	.byte $66, $84, $83
+	.byte MCMD_TOGGLE_SINE_RESET
+	.byte $85, $C5
+	.byte MCMD_NOTEATTACKLEN_SET, $F0
+	.byte MCMD_PATCH_SET, $03
+	.byte MCMD_TOGGLE_SINE_RESET
+	.byte $C5
+	.byte MCMD_LOOPCNT0_INIT_UPDATE, $01
+	sda1 Track_04_SQ2_0B
+
+Track_04_SQ2_0A:	; 9D10
+	.byte $80, $89, $80, $8B
+	.byte MCMD_TOGGLE_TIME_SEL
+	.byte $A9, $A6, $A3
+	.byte MCMD_SYNTH_VOLUME_SET, $0A
+	.byte MCMD_NOTEATTACKLEN_SET, $C8
+	.byte MCMD_TOGGLE_TIME_SEL
+	.byte MCMD_TOGGLE_SINE_RESET
+	.byte $C4
+	.byte MCMD_TOGGLE_SINE_RESET
+	.byte $84
+	.byte MCMD_NOTEATTACKLEN_SET, $AA
+	.byte $A6, $87, $80, $88, $80, $88
+	.byte MCMD_TOGGLE_TIME_SEL
+	.byte $AB, $AB, $A8
+	.byte MCMD_TOGGLE_TIME_SEL
+	.byte $6D, $6B, $6D
+	.byte MCMD_SET_1_5X_TIMING
+	.byte $90, $6D
+	.byte MCMD_FREQOFFSET_SET, $3C
+	.byte $60, $71, $B2
+	.byte MCMD_FREQOFFSET_SET, $00
+	.byte MCMD_SET_1_5X_TIMING
+	.byte $8F, $8D
+	.byte MCMD_SET_1_5X_TIMING
+	.byte $8D, $6D, $8D
+	.byte MCMD_TOGGLE_TIME_SEL
+	.byte $AD, $AD, $AC
+	.byte MCMD_TOGGLE_TIME_SEL
+	.byte $6D, $6B, $6D, $70, $80, $6D, $6B, $6D, $70, $80, $6D, $6B, $6D, $6D
+	.byte MCMD_DUTYCYCLE_SET, $40
+	.byte MCMD_NOTEATTACKLEN_SET, $E6
+	.byte MCMD_TOGGLE_SINE_RESET
+	.byte $D0
+	.byte MCMD_PATCH_SET, $03
+	.byte MCMD_TOGGLE_SINE_RESET
+	.byte $D0
+	.byte MCMD_PATCH_SET, $02
+	.byte $CB, $A8, $A6
+	.byte MCMD_NOTEATTACKLEN_SET, $8C
+	.byte $64, $63, $64, $68, $80, $64, $63, $64, $68, $80, $64, $63, $64, $6C
+Track_04_SQ2_0E:	; 9D74
+
+	.byte MCMD_TRACK_CONFIG, $08
+
+Track_04_SQ2_0C:	; 9D76
+	.byte MCMD_TRACK_CONFIG, $08
+	.byte MCMD_SYNTH_VOLUME_SET, $0A
+	.byte MCMD_FREQOFFSET_SET, $00
+	.byte MCMD_NOTEATTACKLEN_SET, $64
+	.byte MCMD_PATCH_SET, $02
+	.byte MCMD_DUTYCYCLE_SET, $C0
+	.byte $6A, $6A, $60, $6A, $6F, $60, $72, $80
+	.byte MCMD_NOTEATTACKLEN_SET, $C8
+	.byte MCMD_TOGGLE_SINE_RESET
+	.byte $B2
+	.byte MCMD_PATCH_SET, $03
+	.byte MCMD_SET_1_5X_TIMING
+	.byte MCMD_TOGGLE_SINE_RESET
+	.byte $92
+	.byte MCMD_LOOPCNT0_INIT_UPDATE, $01
+	sda1 Track_04_SQ2_0C
+	.byte MCMD_PATCH_SET, $02
+	.byte MCMD_NOTEATTACKLEN_SET, $64
+	.byte MCMD_LOOPCNT1_JMPLAST_CFG, $08
+	sda1 Track_04_SQ2_0D
+	.byte $6D, $6D, $60, $6D, $B1
+	.byte MCMD_TOGGLE_TIME_SEL
+	.byte $AD, $AD, $AD
+	.byte MCMD_SYNTH_VOLUME_SET, $08
+	.byte MCMD_DUTYCYCLE_SET, $80
+	.byte MCMD_NOTEATTACKLEN_SET, $46
+	.byte $40
+	.byte MCMD_TOGGLE_TIME_SEL
+	.byte $74, $72, $71, $6F, $72, $71, $6F, $6D
+	.byte MCMD_NOTEATTACKLEN_SET, $C8
+	.byte MCMD_SET_1_5X_TIMING
+	.byte MCMD_TOGGLE_SINE_RESET
+	.byte $AF
+	.byte MCMD_TOGGLE_TIME_SEL
+	.byte MCMD_TOGGLE_SINE_RESET
+	.byte $8F, $4F
+	.byte MCMD_LOOPCNT1_INIT_UPDATE, $01
+	sda1 Track_04_SQ2_0E
+
+Track_04_SQ2_0D:	; 9DC5
+	.byte MCMD_SYNTH_VOLUME_SET, $0A
+	.byte MCMD_NOTEATTACKLEN_SET, $64
+	.byte $74, $74, $60, $74, $B4
+	.byte MCMD_TOGGLE_TIME_SEL
+	.byte $B4, $B2, $B1
+	.byte MCMD_NOTEATTACKLEN_SET, $FF
+	.byte MCMD_TOGGLE_TIME_SEL
+	.byte $F3
+	.byte MCMD_JUMP_ALWAYS
+	sda1 Track_04_SQ2_0F
+	.byte MCMD_TRACK_STOP
+
+
+Track_04_TRI:
+	.byte MCMD_NOTEATTACKLEN_SET, $DC
+	.byte MCMD_PATCH_SET, $00
+	.byte MCMD_OCTAVE_SET, $03
+
+Track_04_TRI_10:	; 9DE0
+	.byte MCMD_TRACK_CONFIG, $00
+	.byte MCMD_SET_1_5X_TIMING
+	.byte $88, $6B, $80, $8D, $80, $88, $8B, $8D
+	.byte MCMD_LOOPCNT0_INIT_UPDATE, $02
+	sda1 Track_04_TRI_10
+	.byte MCMD_SET_1_5X_TIMING
+	.byte $88, $6B, $80, $8D
+	.byte MCMD_PATCH_SET, $04
+	.byte $7E, $7E, $78, $78, $74, $74, $74, $74
+Track_04_TRI_14:	; 9DFE
+
+	.byte MCMD_TRACK_CONFIG, $00
+
+Track_04_TRI_11:	; 9E00
+	.byte MCMD_TRACK_CONFIG, $00
+	.byte MCMD_PATCH_SET, $00
+	.byte MCMD_SET_1_5X_TIMING
+	.byte $88, $6B, $80, $8D, $80, $88, $8B, $8D
+	.byte MCMD_LOOPCNT0_INIT_UPDATE, $02
+	sda1 Track_04_TRI_11
+	.byte MCMD_SET_1_5X_TIMING
+	.byte $88, $6B, $80, $8D
+	.byte MCMD_TOGGLE_TIME_SEL
+	.byte $A1, $A1, $A1
+Track_04_TRI_12:	; 9E1A
+
+	.byte MCMD_TRACK_CONFIG, $00
+	.byte MCMD_SET_1_5X_TIMING
+	.byte $88, $6B, $80, $8D, $80, $88, $8B, $8D
+	.byte MCMD_LOOPCNT0_INIT_UPDATE, $01
+	sda1 Track_04_TRI_12
+	.byte MCMD_SET_1_5X_TIMING
+	.byte $88, $6B, $80, $8D
+	.byte MCMD_TOGGLE_TIME_SEL
+	.byte $AB, $AB, $AC
+	.byte MCMD_SET_1_5X_TIMING
+	.byte MCMD_TOGGLE_TIME_SEL
+	.byte $8D, $70, $80
+	.byte MCMD_TOGGLE_SINE_RESET
+	.byte $D2
+	.byte MCMD_TOGGLE_SINE_RESET
+	.byte $72, $70, $72, $60, $72, $60, $70, $92, $90
+	.byte MCMD_TOGGLE_TIME_SEL
+	.byte $53, $74
+	.byte MCMD_TOGGLE_TIME_SEL
+	.byte $72, $70, $72, $70, $6D, $6B
+	.byte MCMD_SET_1_5X_TIMING
+	.byte $8D, $74, $80
+	.byte MCMD_TOGGLE_SINE_RESET
+	.byte $B2
+	.byte MCMD_SET_1_5X_TIMING
+	.byte MCMD_TOGGLE_SINE_RESET
+	.byte $92
+	.byte MCMD_SET_1_5X_TIMING
+	.byte $94, $99
+	.byte MCMD_SET_1_5X_TIMING
+	.byte $A0
+	.byte MCMD_TOGGLE_TIME_SEL
+	.byte $AD, $AD, $AD
+Track_04_TRI_13:	; 9E5F
+
+	.byte MCMD_TRACK_CONFIG, $00
+	.byte $AD, $90, $6D, $70, $8D, $8D, $90, $8D
+	.byte MCMD_LOOPCNT0_INIT_UPDATE, $01
+	sda1 Track_04_TRI_13
+	.byte $AF, $92, $6E, $72, $8E, $8E, $92, $8E, $AD, $90, $6D, $70, $92, $92, $93, $94
+	.byte MCMD_PATCH_SET, $00
+	.byte $AF, $92, $6F, $72, $94, $94, $95, $96, $9B, $9B, $99, $96, $94, $94, $95, $76, $78, $AD, $91, $6D, $71, $92, $92, $93, $94, $AD, $90, $6D, $70, $92, $92, $90, $8D, $AF, $92, $6F, $72, $96, $96, $95, $96, $AF, $93, $70, $73, $97, $97, $96, $97, $AD, $91, $6D, $71, $91, $91, $8F, $91, $6F, $71, $72, $6F, $74, $72, $71, $6D
+	.byte MCMD_PATCH_SET, $04
+	.byte $76, $76, $99, $76, $76, $99
+	.byte MCMD_PATCH_SET, $00
+	.byte MCMD_JUMP_ALWAYS
+	sda1 Track_04_TRI_14
+	.byte MCMD_TRACK_STOP
+
+
+Track_04_NSE:
+	.byte MCMD_NOTEATTACKLEN_SET, $C8
+	.byte MCMD_SYNTH_VOLUME_SET, $09
+	.byte MCMD_PATCH_SET, $01
+
+Track_04_NSE_15:	; 9ED4
+	.byte MCMD_TRACK_CONFIG, $00
+	.byte $87, $65, $65
+	.byte MCMD_LOOPCNT0_INIT_UPDATE, $0B
+	sda1 Track_04_NSE_15
+	.byte $6D, $66, $66, $60, $6D, $66, $66, $60, $65, $66, $66, $66, $65, $6A, $6A, $6A
+Track_04_NSE_1E:	; 9EED
+
+	.byte MCMD_TRACK_CONFIG, $00
+	.byte MCMD_SYNTH_VOLUME_SET, $09
+	.byte MCMD_NOTEATTACKLEN_SET, $64
+	.byte $8D
+	.byte MCMD_NOTEATTACKLEN_SET, $C8
+	.byte $6D, $6D
+Track_04_NSE_16:	; 9EF8
+
+	.byte MCMD_TRACK_CONFIG, $00
+	.byte MCMD_NOTEATTACKLEN_SET, $6E
+	.byte $87
+	.byte MCMD_NOTEATTACKLEN_SET, $C8
+	.byte $6D, $6D
+	.byte MCMD_LOOPCNT0_INIT_UPDATE, $0A
+	sda1 Track_04_NSE_16
+	.byte $8C, $6A, $6A, $88, $88
+	.byte MCMD_TOGGLE_TIME_SEL
+	.byte $A6, $A6, $AD
+Track_04_NSE_17:	; 9F0E
+
+	.byte MCMD_TRACK_CONFIG, $00
+	.byte MCMD_NOTEATTACKLEN_SET, $6E
+	.byte $87
+	.byte MCMD_NOTEATTACKLEN_SET, $C8
+	.byte $6D, $6D
+	.byte MCMD_LOOPCNT0_INIT_UPDATE, $07
+	sda1 Track_04_NSE_17
+	.byte $8C, $6A, $6A, $88, $88
+	.byte MCMD_TOGGLE_TIME_SEL
+	.byte $A6, $A6, $A8
+Track_04_NSE_18:	; 9F24
+
+	.byte MCMD_TRACK_CONFIG, $00
+	.byte MCMD_NOTEATTACKLEN_SET, $6E
+	.byte $87
+	.byte MCMD_NOTEATTACKLEN_SET, $C8
+	.byte $6D, $6D
+	.byte MCMD_LOOPCNT0_INIT_UPDATE, $06
+	sda1 Track_04_NSE_18
+	.byte $65, $6A, $6A, $6A
+Track_04_NSE_19:	; 9F35
+
+	.byte MCMD_TRACK_CONFIG, $00
+	.byte MCMD_NOTEATTACKLEN_SET, $6E
+	.byte $87
+	.byte MCMD_NOTEATTACKLEN_SET, $C8
+	.byte $6D, $6D
+	.byte MCMD_LOOPCNT0_INIT_UPDATE, $02
+	sda1 Track_04_NSE_19
+	.byte $6A, $6A, $68, $68, $88, $88, $A6
+	.byte MCMD_NOTEATTACKLEN_SET, $C8
+	.byte MCMD_TOGGLE_TIME_SEL
+	.byte $A6, $AA, $AA
+Track_04_NSE_1A:	; 9F4F
+
+	.byte MCMD_TRACK_CONFIG, $00
+	.byte MCMD_NOTEATTACKLEN_SET, $C8
+	.byte $A5
+	.byte MCMD_SYNTH_VOLUME_SET, $0A
+	.byte $8A
+	.byte MCMD_SYNTH_VOLUME_SET, $08
+	.byte $65, $65, $85, $85
+	.byte MCMD_SYNTH_VOLUME_SET, $0A
+	.byte MCMD_SET_1_5X_TIMING
+	.byte $8A
+	.byte MCMD_SYNTH_VOLUME_SET, $07
+	.byte $66
+	.byte MCMD_LOOPCNT0_INIT_UPDATE, $03
+	sda1 Track_04_NSE_1A
+
+Track_04_NSE_1B:	; 9F68
+	.byte MCMD_TRACK_CONFIG, $00
+	.byte MCMD_SYNTH_VOLUME_SET, $08
+	.byte MCMD_NOTEATTACKLEN_SET, $78
+	.byte $87
+	.byte MCMD_NOTEATTACKLEN_SET, $C8
+	.byte $6D, $6D
+	.byte MCMD_LOOPCNT0_INIT_UPDATE, $0B
+	sda1 Track_04_NSE_1B
+
+Track_04_NSE_1C:	; 9F77
+	.byte MCMD_TRACK_CONFIG, $00
+	.byte MCMD_NOTEATTACKLEN_SET, $C8
+	.byte $87
+	.byte MCMD_NOTEATTACKLEN_SET, $96
+	.byte $6D, $6D
+	.byte MCMD_LOOPCNT0_INIT_UPDATE, $02
+	sda1 Track_04_NSE_1C
+	.byte MCMD_NOTEATTACKLEN_SET, $C8
+	.byte $6A, $6A, $6A, $6A
+Track_04_NSE_1D:	; 9F8A
+
+	.byte MCMD_TRACK_CONFIG, $00
+	.byte $87
+	.byte MCMD_NOTEATTACKLEN_SET, $96
+	.byte $6D, $6D
+	.byte MCMD_LOOPCNT0_INIT_UPDATE, $0A
+	sda1 Track_04_NSE_1D
+	.byte MCMD_NOTEATTACKLEN_SET, $C8
+	.byte $6A, $6A, $6A, $6A
+	.byte MCMD_SET_1_5X_TIMING
+	.byte $85, $65, $8A, $65, $6C, $88, $88, $66, $66, $66, $66
+	.byte MCMD_JUMP_ALWAYS
+	sda1 Track_04_NSE_1E
+	.byte MCMD_TRACK_STOP

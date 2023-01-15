@@ -1,0 +1,144 @@
+All Tilemap data is the same rigid format described here. Tilemaps 16+ are not actually intended for level usage in stock MM4, rather just for BG display data like title screen, credits, etc. and some parts of its data may be invalid if attempted for use in a level... but probably could become usable with a little bit of work!
+
+Tilemaps are defined as increasingly meta data:
+	- [8PAT] TileLayout_Patterns -- Four 8x8 pattern sets of 256 pattern entries that define the quarters of 16x16 tiles [16TL] (upper left, upper right, lower left, lower right)
+
+	- [16TL] TileLayout_Attributes -- 256 entries that define attributes for 16x16 tiles
+		- Bits 0-1: Palette selection
+		- Bits 4-7: Sets a particular attribute to the tile:
+			- $0x = Unsolid
+			- $1x = Solid
+			- $2x = Ladder (mid)
+			- $3x = Spikes
+			- $4x = Ladder (top)
+			- $5x = Unused?
+			- $6x = Water
+			- $7x = Drill Man dynamic reappearing floor
+			- $8x = Toad Man's flowing water (push right)
+			- $9x = Dust Man's shootable crusher blocks
+			- $Ax = Toad Man's flowing water (push left)
+			- $Bx = Cossack ice
+			- $Cx = Pharaoh Man's quicksand, Cossack 1's snow, or Toad Man's water flow center (no push)
+
+	- [META] MetaBlk_TileLayout -- 256 sets of 4 bytes that define the corners of a 32x32 metatile made up from the 16x16 tiles [16TL] (upper left, upper right, lower left, lower right)
+	
+	- [SCRM] MetaBlk_ScrLayout -- 32 "screens" of metatiles [META] (8x8 grid of 32x32 metatiles)
+
+	- [OBJx] Level_LayoutObjXHi / Level_LayoutObjX / Level_LayoutObjY / Level_LayoutObjIDs
+		(Up to) 127 objects defined in level (XHi, X, Y, IDs); each terminated by $FF
+
+	- [SPNH] Level_LayoutObjHintByScr -- 32 "spawn hints" indexes for the screens (defines when the "first" object should spawn for a particular screen, see notes in ASM)
+
+	- [SCRI] MetaBlk_ScrLayoutOffset -- 32 (max?) indexes into the screens [SCRM] (the usefulness of this table is kind of questionable, could allow screens to be rearranged/reused)
+
+	- [SEGD] Level_SegmentDefs -- 16 "segment" definitions that define a run of screens
+		- Bits 0-3: Defines number of screens in segment
+		- Bits 4-7: Attribute bits [UDH?]
+		EXPERIMENTS:
+			- $02 on CURRENT and $06 ($02 | $04 SPRDIR_DOWN) on NEXT, allows for dropping down
+		
+		
+			- $20 if set on NEXT segment will allow player to scroll from right edge (but NOT if $80 is set on NEXT!) 
+
+			- $80 must be set on NEXT segment for ladder to work UP (to progress forward)
+			- $80 must be set on PREV segment for ladder to work DOWN (to progress backward)
+
+			- $20 must ALSO be set for screen to scroll after climbing UP ladder
+
+			- $40 must be set on CURRENT segment for ladder to work DOWN (to progress forward)
+
+			- $20 must be set on NEXT segment to enable horizontal scrolling
+
+			MOVE UP LADDER EXAMPLE:
+
+			Both prev/next segs need $08 set to do an UP (forward) and DOWN (backward) ladder
+				- $02 needs to be set for right scroll on each (so $0A/$0A will enable an up/down ladder between segs)
+				
+				- $06/$06 between segs would enable a DOWN (foward) and UP (backward) ladder
+				
+				
+			BEAR IN MIND that a DOWN ladder should be right-oriented, and an UP ladder shu
+
+
+
+				- NEXT seg with $06 enables right-scrolling and a FALL entrance (so $06/$06 matches)
+				
+				
+			NEXT seg:
+				$02 - Right scrolling permitted
+				$04 - Falling DONW into this seg is permitted
+				$08 - Going UP into this seg is permitted
+				
+			NEXT seg:
+				$03 - Moving into next segment triggers boss gates!!!!!!!!!!!!!!!!!!!!!!!!!!!
+				
+				
+			PROTIP: Ladders (and likely other junctions) only really function correctly
+			if screen is fully locked, thus if you approach a ladder to the left, place
+			ladder left of center of the left-most screen of the segment. Similarly 
+			place ladders to the right of center on the right-most screen of a segment.
+			Misalignment tends to cause the things to malfunction.
+			Obviously doesn't matter on non-horizontal-scroll junction segments.
+
+`			Boss gate standard?
+				$XX in seg leading up to gate
+				$03 / 0 SCR for "middle of gate" segment
+				$03 / 0 SCR for "boss room" segment
+
+
+	- [ALTP] Level_ScreenAltPathLinks -- Up to 3 "alternate path" defs, 4 bytes each (0 or 2 typical); allows non-sequential jumps in screens
+		CHECKME: Some might be wrong, need to verify
+		- Byte 0: Screen when alternate path occurs [SCRM]
+		- Byte 1: Direction to travel to take for alternate path (e.g. $40 = Down, $80 = Up)
+		- Byte 2: Segment definition index to jump to [SEGD]
+		- Byte 3: Screen to jump to on alternate path [SCRM]
+
+	- [PALS] Level_SegmentPalSel -- 16 "segment" palette definitions (directly corresponding to the respective segment)
+		- If $00, no palette change occurs (so you can't ever use the first entry in Level_BGPaletteData this way!)
+		- Otherwise this is multiplied by 20 and indexes [PALD]
+			- First 16 bytes of accessed data is the BG palette
+			- Final 4 bytes set the palette animation slots (if a slot matches the current animation in that slot, it does nothing, otherwise initializes anew, $00 to disable that slot)
+
+	- [SEGC] Level_SegmentDynCHRPalIndex -- 16 "segment" CHR definitions (specifies CHR to load into dynamic loader, may be any size of actual data)
+
+	- [GATO] Level_BossGateBaseVADDR -- Opening boss gate data
+		- 2 bytes for where the VRAM change begins (starting at bottom)
+		- 4 replacement tile IDs (bottom to top)
+		- Value OR'd with $23C0 for attribute data target
+		- Mask to apply for attribute data before OR'ing the attribute data (since on NES this defines an entire 32x32 space!)
+		- 4 bytes of attribute data to OR in (bottom to top)
+
+	- [GATC] Level_BossGateBaseVADDR (cont'd) -- Closing boss gate data
+		- 2 bytes for where the VRAM change begins (starting at top)
+		- 4 replacement tile IDs (top to bottom)
+		- Value OR'd with $23C0 for attribute data target
+		- Mask to apply for attribute data before OR'ing the attribute data (since on NES this defines an entire 32x32 space!)
+		- 4 bytes of attribute data to OR in (top to bottom)
+
+	- [PALD] Level_BGPaletteData -- Palette data; up to about 18 possible entries of 20 bytes each, selected by [PALS], consisting of:
+		- 16 bytes of BG palette data
+		- 4 bytes of palette animation settings (if matches current animation, does nothing, otherwise initializes and resets)
+
+
+
+Relative offsets:
+
+ID	RANGE			LENGTH	NOTE
+[8PAT]	0x0000 - 0x03FF		0x0400
+[16TL]	0x0400 - 0x04FF		0x0100
+[META]	0x0500 - 0x08FF		0x0400
+[SCRM]	0x0900 - 0x10FF		0x0800
+[OBJx]	0x1100 - 0x12FF		0x0200	XHi, X, Y, IDs -- 0x80 each; $FF terminated each
+[SPNH]	0x1300 - 0x131F		0x0020
+ ----	0x1320 - 0x14FF		0x01E0	Unused space
+[SCRI]	0x1500 - 0x151F		0x0020
+ ----	0x1520 - 0x152F		0x0010	Unused space
+[SEGD]	0x1530 - 0x153F		0x0010
+[ALTP]	0x1540 - 0x154F		0x0010
+[PALS]	0x1550 - 0x155F		0x0010
+[SEGC]	0x1560 - 0x156F		0x0010
+[GATO]	0x1570 - 0x157B		0x000C	
+[GATC]	0x157C - 0x1587		0x000C
+ ----	0x1588 - 0x158F		0x0008	Unused space
+[PALD]	0x1590 - 0x16FF		0x0170
+

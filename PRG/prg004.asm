@@ -1,0 +1,7 @@
+PRG004_8000:	.incchr "CHR/04_8000.pcx"
+PRG004_9000:	.incchr "CHR/04_9000.pcx"
+PRG004_9200:	.incchr "CHR/04_9200.pcx"
+PRG004_9300:	.incchr "CHR/04_9300.pcx"
+PRG004_9500:	.incchr "CHR/04_9500.pcx"
+PRG004_9600:	.incchr "CHR/04_9600.pcx"
+PRG004_9800:	.incchr "CHR/04_9800.pcx"

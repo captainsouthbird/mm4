@@ -1,0 +1,7 @@
+PRG001_A000:	.incchr "CHR/01_A000.pcx"
+PRG001_A200:	.incchr "CHR/01_A200.pcx"
+PRG001_A800:	.incchr "CHR/01_A800.pcx"
+PRG001_AE00:	.incchr "CHR/01_AE00.pcx"
+PRG001_B000:	.incchr "CHR/01_B000.pcx"
+PRG001_B400:	.incchr "CHR/01_B400.pcx"
+PRG001_BA00:	.incchr "CHR/01_BA00.pcx"

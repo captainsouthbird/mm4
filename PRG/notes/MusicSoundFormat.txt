@@ -1,0 +1,422 @@
+SFX DATA IS NOT AT ALL RELATED TO MUSIC DATA
+
+	First byte:
+		- Bit 7: If set, perpetual loop mode is enabled
+		- Lower 7 bits: Specifies the SFX priority
+
+
+Sound effects begin their processing and cycle around here repeatedly:
+
+	1) Then, SFX command(s)...
+		- With exception of $FF terminator, the commands can be chained
+		  since they're processed as bits shifted through
+	
+		- $FF is a terminator
+		
+		- $01 is loop / jump
+			- loop count and jump address follows (3 bytes)
+			- If loop count = $00, this is a "JUMP ALWAYS"
+			- Otherwise, it's a loop (count + 1) times
+			
+		- $02 is "note length" setting (attack / decay stuff)
+			- Stores a fetched byte -> RAM_00D4
+			
+		- $04 is note transpose setting
+			- Stores a fetched byte -> Snd_NoteTranspose
+			
+	2) Then, a byte specifies the rest time
+		- fetched byte -> Sound_RestTimer
+	
+	3) Then, a byte specifies channel select (multiple channels can be employed!)
+		- $00 = silence; also, this will skip any further processing this round		
+		- $01 = Square 1
+		- $02 = Square 2
+		- $04 = Triangle
+		- $08 = Noise
+
+If the channel select was not $00... for ALL channels
+		
+	4) Then, a bitfield specifies a number of commands to execute
+		- Command pointers are at PRG030_8326
+		- Each bit set fetches a byte (as a parameter) and executes the next sequential command
+		- Example: %00000111
+			- Fetch byte, run command 0
+			- Fetch byte, run command 1
+			- Fetch byte, run command 2
+			
+	5) Then, fetch a byte that is either a note or silence ($00)
+		- So if $00 is fetched, the track is silenced
+		- Otherwise, this is a note value
+		- The base note value is determined by bit 7 of the current Sound_FreqOffset, which is set by PRG030_8326 command #3 ($54 if set, other $0A)
+
+
+Afterward, start anew with SFX processing at the top
+
+
+
+EXAMPLE:
+
+	.byte $07	; Priority 7, not perpetually looping
+	
+booger:
+	.byte $02
+	.byte $FF	; $FF -> RAM_00D4
+	
+	.byte $03	; -> Sound_RestTimer (larger values slow the waveform transformation)
+	.byte $02	; $01 = Square 1, $02 = Square 2, $04 = Triangle, $08 = Noise
+	
+	; Executes commands 0, 1, 2 (each bit)
+	.byte %00000111
+	
+	; Inputs to those commands
+	.byte $02, $C0, $0F
+	
+	.byte $2C	; note
+	
+	.byte $00	; no SFX commands
+	.byte $03	; -> Sound_RestTimer	
+
+	.byte $00	; no channel, silence (so skipping the command fetch and note fetch)
+	
+	; Back at the beginning...
+	
+	.byte $01		; loop command
+	.byte $02		; repeat count
+	.byte HIGH(booger) + $20, LOW(booger)	; jump address
+
+	; Loop ended, we're post-command (#3) right now...
+	
+	.byte $00	; -> Sound_RestTimer	
+	.byte $00	; no channel, silence (so skipping the command fetch and note fetch)
+	
+	.byte $FF	; Terminator
+
+
+---------------------
+
+Byte value < $20 [$00-$1F]
+		
+	Executes a routine from PRG030_84A4
+	
+	Values >= $04 fetch an additional parameter byte
+
+	$00 - Toggles bit 5 ($20) Music_TrackOctaveTimingCtl (timing select -- not set, PRG030_DelayTable2, otherwise PRG030_DelayTable1 or PRG030_DelayTable1 * 1.5 based on bit 4)
+	$01 - Toggles bit 6 ($40) on Music_TrackOctaveTimingCtl (sine wave reset) -- the idea is to split 
+	$02 - SETS bit 4 ($10) on Music_TrackOctaveTimingCtl (PRG030_DelayTable2 * 1.5, one time)
+	$03 - Toggles bit 3 ($08) on Music_TrackOctaveTimingCtl  (highest bit of octave select)
+	$04 - set bits 3, 5, and 6 on Music_TrackOctaveTimingCtl (technically just an OR'd value against the rest, so use caution)
+	$05 - Sets tempo; 2 parameters, MusTempo and MusTempo_Frac
+	$06 - sets Music_NoteAttackLength
+	$07 - New synth volume, also sets constant volume / length counter disabled (parameter expected to only set lower 4 bits? 4 and 5 irrelevant, 6 and 7 possible?)
+	$08 - set track patch value
+	$09 - set octave (0 through 7 is the only valid value range!)
+	$0A - sets transpose to parameter
+	$0B - sets MusTrack_Transpose (track-specific note tranposition value)
+	$0C - sets Sound_FreqFineOffset
+	$0D - sets Sound_FreqOffset
+	$0E - Init/update loop counter 0 [parameter 1 is the loop count init, parameter 2 and 3 are the jump address]
+	$0F - Init/update loop counter 1 [parameter 1 is the loop count init, parameter 2 and 3 are the jump address]
+	$10 - Init/update loop counter 2 [parameter 1 is the loop count init, parameter 2 and 3 are the jump address]
+	$11 - Init/update loop counter 3 [parameter 1 is the loop count init, parameter 2 and 3 are the jump address]
+	$12 - Jump on last iteration of loop counter 0 (NOTE: not dupe of $0E due to logic) [parameter 1 is passed to command $04, parameter 2 and 3 are the jump address]
+	$13 - Jump on last iteration of loop counter 1 (NOTE: not dupe of $0F due to logic) [parameter 2 is passed to command $04, parameter 2 and 3 are the jump address]
+	$14 - Jump on last iteration of loop counter 2 (NOTE: not dupe of $10 due to logic) [parameter 3 is passed to command $04, parameter 2 and 3 are the jump address]
+	$15 - Jump on last iteration of loop counter 3 (NOTE: not dupe of $11 due to logic) [parameter 4 is passed to command $04, parameter 2 and 3 are the jump address]
+	$16 - Always jump to address specified (parameter 1 and 2)
+	$17 - silence/stop the track
+	$18 - New duty cycle, also sets constant volume / length counter disabled (parameter expected to only set bits 6 and 7, 4 and 5 irrelevant, lower 4 possible?)
+	
+	$19-$1F INVALID
+
+
+	** WITH EXCEPTION OF $17, another byte is immediately read, so it intends to make $20+ vals the primary
+	
+	
+Byte value >= $20
+	Upper 3 bits select a delay value from PRG030_DelayTable1 or PRG030_DelayTable2
+
+
+	$E0 appeared to be some kind of rest value?
+		- Upper 3 bits when rolled around = 7 (index is 6 due to zero-basing)
+		- Becomes index into PRG030_DelayTable1/2 depending on bit 5 of Music_TrackOctaveTimingCtl / Music_TrackOctaveAndWHAT
+			- If bit 5 is SET, use PRG030_DelayTable1 straight
+				- Otherwise, use PRG030_DelayTable2
+			- If bit 5 is NOT set AND bit 4 is SET, use use PRG030_DelayTable2 * 1.5, and bit 4 is cleared
+			
+		- Lower 5 bits equal zero which is a special case that sets function 3 (note decay) select on RAM_0704 (see PRG030_UpdateSynth)
+		  i.e. don't play any note and just rest!
+		
+
+
+TODO:
+	- Bright Man seems to set tempo / transpose settings in Square 1; is this standard to be the "conductor" track?
+
+	- Since there's a transpose value, is there a limitation on the range of notes? May need to keep that in mind when writing a converter if so
+
+	- If same note repeats in a music track [PRG030_85FC]
+		- If Music_TrackOctaveTimingCtl bit 7 is set ... PRG030_861D
+		
+		Basically a repeat note can extended a fractional length by the pattern (same "nn" for all)
+		$01 <-- block start
+		$nn
+		$nn
+		$nn
+		$01 <-- block end
+		$nn
+
+
+	RAM_00CC / RAM_00CD have something to do with track disabling
+	
+	RAM_00CC:
+		- Bit 7 set, invert RAM_00CD
+	
+	
+	RAM_0704 [RAM_072C]
+		- Bits 0 and 1 do something??
+			Of note, these are both cleared when bit 2 gets set
+	
+		- Bit 2 ($04): If set and RAM_0710 expires:
+			sets bit 0 ($01) and 1 ($02) of RAM_0704 and clears bit 2 ($04)
+			(Rename PRG030_Set_RAM_0704_Bits01 when you figure out what this means)
+			
+			--- Bits 0-2 form a selector in PRG030_UpdateSynth
+			--- Hence the only possible selectors are 0-4 (since bit 0 and 1 get cleared with bit 2 set)
+			
+			
+		- Bit 3 ($08): If set:
+			- RAM_0708 is zeroed
+			- bits 3 ($08), 6 ($40), and 7 ($80) are cleared
+			
+		- Bit 5 ($20) ??
+		
+		- Bit 6 ($40) inverts RAM_0708
+		
+		- Bit 7 ($80) "wobble" waveform is added (if clear) or subtracted (if set)
+
+
+	RAM_0708 [RAM_0730]
+	Music_TrackOctaveTimingCtl
+		- Patch_ptr+4 (sans bit 7) will get added to this, overflow will add to RAM_0704 and $40 (PRG030_88FA)
+
+	RAM_070C [RAM_0734] -- I think this is synth config
+		- Bits 4 ($10) and 5 ($20)
+		- Bits 6 ($40) and 7 ($80)
+		
+		Upper nibble (at least) is written to PAPU_CTL1, PAPU_CTL2, PAPU_TCR1, PAPU_NCTL1
+	
+	RAM_0710 [RAM_0738]  TRACK VOLUME
+		- is decremented; some kind of timer? When it hits zero: Follow bit 2 behavior of RAM_0704
+		- Upper nibble: Only actual applied value
+			- Square 1 uses $Fx to $0x (loudest to quietest)
+			- Square 2 uses $Fx to $7x (loudest to quietest)
+			- Triangle it's just on or off (non-zero vs zero)
+			- Noise uses $Fx to $0x (loudest to quietest)
+			
+		- Lower nibble: Mostly nothing but used for decrement counter, but also effects noise "somehow"
+
+	RAM_0714 [RAM_073C] -- Synth fine tune (PAPU_FT1, PAPU_FT2, PAPU_TFREQ1, PAPU_NFREQ1)
+
+	RAM_0718 [RAM_0740]
+		- Bit 7:
+			If set, $54 -> Sound_LastNotePlayed (when?)
+			If clear, $0A -> Sound_LastNotePlayed (when?)
+
+	RAM_072C [RAM_0754]: Some kind of "high" value to Music_TrackPatch ?? (per PRG030_8566)
+
+	RAM_073C [RAM_0764]
+
+	RAM_0740 [RAM_0768]
+		- Subtracted by MusTempoAccum_H -- I think this a note length or possibly decay rate; $00 is very short, $FF is very long
+		- When it reaches zero, sets bit 0 ($01) and 1 ($02) of RAM_0704 and clears bit 2 ($04)
+
+
+	RAM_077C set to $FF when silenced
+
+
+
+patch byte 0:
+	Index into PRG030_TrackVolumeDelta, adds to Sound_TrackVolume,X (upper bound volume?)
+
+patch byte 1:
+	Index into PRG030_TrackVolumeDelta, subtracts from Sound_TrackVolume,X (lower bound volume?)
+
+patch byte 2:
+	Sets Sound_TrackVolume,X directly
+
+patch byte 4:
+	Lower 7 bits are added to Sound_SineWaveAccum
+
+
+-------------------------------
+
+Cmd 0x05: Set tempo MusTempo = 01, MusTempo_Frac = EB
+Cmd 0x0A: Global transpose = FD
+Cmd 0x06: Music_NoteAttackLength = C8
+Note value = 0  delay index = 6
+Note value = 0  delay index = 6
+Cmd 0x04: Set bits 3, 5, and 6 on Music_TrackOctaveTimingCtl -- 00
+Cmd 0x04: Set bits 3, 5, and 6 on Music_TrackOctaveTimingCtl -- 00
+Cmd 0x09: Set octave [expecting 0 to 7?] = 02
+Cmd 0x07: New synth vol [expecting lower 4 bits only?] = 0C
+Cmd 0x06: Music_NoteAttackLength = AA
+Cmd 0x08: Set patch = 02
+Cmd 0x18: New duty cycle [expecting bits 6 and 7 only?] = C0
+Note value = 27  delay index = 4
+Note value = 27  delay index = 2
+Note value = 29  delay index = 2
+Note value = 0  delay index = 2
+Cmd 0x01: Toggle sine reset
+Note value = 30  delay index = 4
+Cmd 0x01: Toggle sine reset
+Note value = 30  delay index = 2
+Cmd 0x03: Toggle highest octave bit
+Note value = 8  delay index = 4
+Note value = 5  delay index = 2
+Note value = 3  delay index = 2
+Note value = 0  delay index = 2
+Cmd 0x02: Set 1.5x timing
+Note value = 1  delay index = 3
+Note value = 17  delay index = 2
+Note value = 15  delay index = 2
+Note value = 0  delay index = 2
+Note value = 13  delay index = 4
+Cmd 0x02: Set 1.5x timing
+Note value = 0  delay index = 3
+Cmd 0x03: Toggle highest octave bit
+Note value = 23  delay index = 2
+Note value = 25  delay index = 2
+Note value = 0  delay index = 2
+Cmd 0x01: Toggle sine reset
+Note value = 27  delay index = 4
+Cmd 0x01: Toggle sine reset
+Note value = 27  delay index = 2
+Cmd 0x12: Jump on last iteration of loop counter0 = 00 -> 8D63
+Note value = 25  delay index = 2
+Note value = 27  delay index = 2
+Note value = 0  delay index = 2
+Note value = 29  delay index = 4
+Note value = 25  delay index = 2
+Note value = 27  delay index = 2
+Note value = 0  delay index = 2
+Note value = 30  delay index = 2
+Note value = 0  delay index = 2
+Note value = 29  delay index = 2
+Note value = 0  delay index = 2
+Note value = 25  delay index = 2
+Note value = 27  delay index = 2
+Note value = 0  delay index = 2
+Cmd 0x03: Toggle highest octave bit
+Note value = 15  delay index = 2
+Note value = 0  delay index = 2
+Note value = 15  delay index = 3
+Note value = 13  delay index = 2
+Note value = 17  delay index = 2
+Note value = 0  delay index = 2
+Cmd 0x0E: Init/update loop counter0 = 01 -> 8D1D
+Note value = 30  delay index = 2
+Note value = 29  delay index = 2
+Note value = 0  delay index = 2
+Cmd 0x03: Toggle highest octave bit
+Note value = 8  delay index = 4
+Note value = 9  delay index = 2
+Note value = 10  delay index = 2
+Note value = 0  delay index = 2
+Note value = 10  delay index = 2
+Note value = 0  delay index = 3
+Note value = 13  delay index = 2
+Note value = 0  delay index = 2
+Note value = 14  delay index = 2
+Note value = 15  delay index = 4
+Note value = 0  delay index = 4
+Cmd 0x0B: Track transpose = 00
+Cmd 0x06: Music_NoteAttackLength = 00
+Cmd 0x06: Music_NoteAttackLength = DC
+Cmd 0x18: New duty cycle [expecting bits 6 and 7 only?] = C0
+Cmd 0x07: New synth vol [expecting lower 4 bits only?] = 0E
+Cmd 0x08: Set patch = 07
+Note value = 0  delay index = 4
+Cmd 0x03: Toggle highest octave bit
+Note value = 17  delay index = 4
+Cmd 0x02: Set 1.5x timing
+Note value = 12  delay index = 3
+Cmd 0x02: Set 1.5x timing
+Note value = 17  delay index = 3
+Note value = 26  delay index = 3
+Cmd 0x02: Set 1.5x timing
+Note value = 24  delay index = 4
+Note value = 22  delay index = 4
+Note value = 21  delay index = 4
+Note value = 22  delay index = 3
+Cmd 0x02: Set 1.5x timing
+Note value = 24  delay index = 4
+Cmd 0x01: Toggle sine reset
+Note value = 17  delay index = 5
+Cmd 0x01: Toggle sine reset
+Note value = 17  delay index = 3
+Cmd 0x07: New synth vol [expecting lower 4 bits only?] = 0C
+Cmd 0x06: Music_NoteAttackLength = C8
+Cmd 0x08: Set patch = 03
+Note value = 17  delay index = 4
+Note value = 19  delay index = 4
+Note value = 20  delay index = 4
+Note value = 22  delay index = 4
+Cmd 0x07: New synth vol [expecting lower 4 bits only?] = 0E
+Cmd 0x06: Music_NoteAttackLength = DC
+Cmd 0x08: Set patch = 07
+Note value = 20  delay index = 3
+Note value = 0  delay index = 3
+Note value = 20  delay index = 4
+Cmd 0x02: Set 1.5x timing
+Note value = 15  delay index = 3
+Cmd 0x02: Set 1.5x timing
+Note value = 20  delay index = 3
+Note value = 27  delay index = 3
+Cmd 0x02: Set 1.5x timing
+Note value = 26  delay index = 4
+Cmd 0x02: Set 1.5x timing
+Note value = 24  delay index = 4
+Note value = 22  delay index = 4
+Note value = 25  delay index = 5
+Note value = 22  delay index = 4
+Note value = 29  delay index = 4
+Cmd 0x02: Set 1.5x timing
+Note value = 24  delay index = 4
+Note value = 0  delay index = 3
+Note value = 24  delay index = 4
+Note value = 26  delay index = 4
+Note value = 27  delay index = 4
+Note value = 0  delay index = 3
+Cmd 0x02: Set 1.5x timing
+Note value = 20  delay index = 3
+Cmd 0x02: Set 1.5x timing
+Note value = 27  delay index = 3
+Note value = 27  delay index = 2
+Note value = 0  delay index = 2
+Note value = 29  delay index = 2
+Note value = 0  delay index = 2
+Note value = 29  delay index = 4
+Note value = 0  delay index = 3
+Cmd 0x02: Set 1.5x timing
+Note value = 22  delay index = 3
+Cmd 0x02: Set 1.5x timing
+Note value = 26  delay index = 3
+Note value = 27  delay index = 2
+Note value = 0  delay index = 2
+Note value = 29  delay index = 2
+Note value = 0  delay index = 2
+Cmd 0x02: Set 1.5x timing
+Cmd 0x01: Toggle sine reset
+Note value = 29  delay index = 5
+Cmd 0x01: Toggle sine reset
+Note value = 29  delay index = 3
+Note value = 24  delay index = 3
+Cmd 0x02: Set 1.5x timing
+Cmd 0x01: Toggle sine reset
+Cmd 0x03: Toggle highest octave bit
+Note value = 12  delay index = 5
+Cmd 0x01: Toggle sine reset
+Note value = 12  delay index = 4
+Cmd 0x0B: Track transpose = 02
+Cmd 0x16: Always jump = 8D1B
+Cmd 0x17: Track stop!
+

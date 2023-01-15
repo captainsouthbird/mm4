@@ -1,0 +1,179 @@
+00 = Enemy: Taketento [Mushroom with detaching propellar]
+01 = Enemy: Hover [Pharaoh Man platform guy that also shoots]
+02 = Enemy: Tom Boy [slinky]
+03 = Enemy: Sasoreenu [Pharaoh Man scorpian guy]
+04 = Enemy: Battan [grasshopper]
+05 = Enemy: Swallown [blue bird with little birds (Coswallown)]
+06 = Enemy: Wall Blaster, mounted on right wall [Ring Man directional gun]
+07 = Enemy: Wall Blaster, mounted on left wall [Ring Man directional gun]
+08 = Ring Man rainbow platform controller 1
+09 = Ring Man rainbow platform controller 2
+0A = Ring Man rainbow platform controller 3
+0B = Ring Man rainbow platform controller 4
+0C = Ring Man rainbow platform controller 5
+0D = Ring Man rainbow platform controller 6
+0E = Ring Man rainbow platform controller 7
+10 = Enemy: 100 Watton [winged light bulb]
+11 = Enemy: Ratton [jumping rat]
+12 = Enemy: Whopper [ring-based sub-boss]
+13 = Enemy: Haehaey [Pharaoh Man fast flying bug like]
+14 = Enemy: Rackaser [Metall like guy with the umbrella]
+15 = Enemy: Dompan [green guy]
+16 = Dive Man bidirectional water level controller
+17 = Dive Man bidirectional water level controller 2?
+18 = Enemy: Kabatoncue [giant hippo sub-boss on platform]
+19 = Ring Man ???
+1A = Ring Man ??? something solid
+1B = Wily 2 ?? Large, damaging thing that deflects shots... probably the body of "Tako Trash"?
+1C = Cossack 3 "solid??" maybe for boss?
+1E = Enemy: Escaroo [Huge Snail]
+1F = Toad Man ???
+20 = Toad Man ???
+28 = Bright Man Red U-track platform
+29 = Wall that requires Drill Bomb to break
+2D = Enemy: Minoan [hangs from ceiling, drops]
+2E = Enemy: Super Ball Machine Jr., firing left [Skull Man bouncy ball cannon]
+2F = Enemy: Super Ball Machine Jr., firing right [Skull Man bouncy ball cannon]
+30 = Drill Man Falling rocks "Boulder"
+31 = Eddie / Flip-Top
+33 = Enemy: Jumbig [big red/orange guy who jumps]
+34 = Enemy: Shield Attacker [rocket-powered enemy with face shield]
+35 = Wily 1 disappearing/reappearing blocks
+36 = Enemy: Totem Polen [totem pole]
+37 = Dive Man ???
+38 = Enemy: Moby [Dive Man whale sub-boss]
+39 = Dive Man ???
+3A = Dive Man ???
+3B = Enemy: Metall who shoots 3 shots and charges, then hides
+3C = Enemy: Metall who jumps, shooting 3 shots, then hides
+41 = Drill Man flip switch
+42 = Enemy: Metall that twirls
+44 = Dust Man crusher activator
+45 = Enemy: M-422A [Dive Man floaty thing with the claws]
+46 = Enemy: Skullmet, firing right [mostly shielded guy with vulnerable eyeball that fires falling projectile]
+47 = Enemy: Puyoyon [blobby amoeba thing]
+48 = Enemy: Skeleton Joe [Skull Man bone tosser]
+49 = Enemy: Ring Ring [Ring Man planet]
+4A = Enemy: Metall Swim
+4B = Enemy: Skullmet, firing left [mostly shielded guy with vulnerable eyeball that fires falling projectile]
+4C = Enemy: Helipon [guy who spins around in the air, lands, and shoots]
+4D = Enemy: Gyotot [fish that charges and jumps]
+4E = Enemy: Docron [hatch in ceiling that deposits skull enemy]
+4F = Dust Man 4-piece assembling platform
+50 = Wily 3 ???
+51 = Enemy: Biree 1 [little sparking thing that traces platforms]
+52 = Enemy: Biree 2 [little sparking thing that traces platforms]
+53 = Enemy: Wily Machine 4
+54 = Enemy: Togehero [slow moving, slow turning enemy with spikes]
+55 = Wily 3 ???
+56 = Item: Energy Tank
+57 = Enemy: Mothraya [Cossack 1 Boss, giant lady bug thing]
+58 = Cossack 1 ???
+59 = Cossack 1 ???
+5A = Item: Large Health Energy
+5B = Item: Small Health Energy
+5C = Enemy: Battonton [bat]
+5D = Enemy: Mantan [Dive Man stingray thing]
+5E = Enemy: Cossack Catcher [Cossack 4 Dr. Cossack boss]
+5F = Cossack 4 ???
+60 = Cossack 4 ???
+61 = Enemy: Square Machine [Cossack 2 triple-part boss]
+62 = Cossack 2 ???
+63 = Cossack 2 "wall??" [invisible, blocks horizontal movement like a wall]		<-- are these related to Square Machine?
+64 = Cossack 2 "solid??" [invisible, blocks horizontal movement like a wall]	<-- are these related to Square Machine?
+65 = Cossack 2 "solid??" [invisible, blocks horizontal movement like a wall]	<-- are these related to Square Machine?
+66 = Cossack 2 "solid??" [invisible, blocks vertical movement like a floor]		<-- are these related to Square Machine?
+67 = Enemy: Mummira [Pharaoh Man mummy]
+68 = Enemy: Imorm [caterpillar thing that drops from ceiling and crawls around]
+69 = Enemy: Cockroach Twins [Cossack 3 boss]
+6A = Cossack 3 sinking platform
+6B = Enemy: Mono Roader [guy who shields his eyes and spins towards you]
+6C = Enemy: Metall Daddy [Wily 1 boss]
+6D = Wily 1 ???
+6E = Enemy: Gachappon [tall red guy with the ball tank]
+6F = Boss: Tako Trash [Wily 2 boss that shoots stuff and has small weak point; technically just the weak point]
+70 = Wily 2 ?? Large, damaging thing that deflects shots... probably the body of "Tako Trash"?
+71 = Wily 2 ??? Related to "Tako Trash"?
+72 = Enemy: Pakatto 24 [shielded gun that opens and fires]
+73 = Enemy: Up'n'Down [guy who obnoxiously pops out of a pit]
+74 = Wily transporter blinking light
+75 = Cossack 2 block with spikes that come out left/right or top/bottom
+76 = Cossack 2 block with spikes that come out left/right or top/bottom [alternate timing]
+77 = Enemy: Sea Mine [Dive Man spikey ball that explodes if shot]
+78 = Enemy: Garyoby [little floor saw]
+79 = Enemy: Stage boss [level determines]
+7A = Item: Large Weapon Energy
+7B = Item: Small Weapon Energy
+7C = Item: 1-Up
+7D = Item: Balloon
+7E = Item: Wire Adapter
+7F = Enemy: Wily Capsule [Final boss]
+80 = Bright Man ??? [non-interactive?]
+81 = Enemy: Ladder Press Left Half [spiky things on ladders]
+82 = Bright Man Green U-track platform
+83 = Dive Man "wall??" [invisible, blocks horizontal movement like a wall]
+84 = Enemy: Ladder Press Left Half [spiky things on ladders]
+85 = Cossack 1 ???
+86 = Toad Man ??? [hurts if touched]
+87 = Dive Man ???
+C0 = Toad Man ???
+C1 = Toad Man ???
+C2 = Toad Man ???
+C3 = Toad Man ???
+C4 = Bright Man ???
+C5 = Bright Man palette switch
+C6 = Bright Man ???
+C7 = Bright Man ???
+CC = Drill Man ???
+CD = Dive Man ???
+CE = Dive Man palette switch
+CF = Dive Man ???
+D2 = Bright Man ???
+D3 = Dust Man ???
+D4 = Dust Man ???
+D5 = Skull Man palette switch
+D6 = Skull Man ???
+D7 = Skull Man palette switch
+D8 = Dive Man palette switch
+D9 = Pharaoh Man ???
+DA = Pharaoh Man palette change
+DB = Cossack 1 palette change (snow)
+DC = Cossack 1 palette change
+DD = Pharaoh Man ???
+DE = Wily 3 palette change
+DF = Wily 3 palette change
+E0 = Dive Man palette switch
+E1 = Dive Man ???
+
+
+Bank 32: $04 $10 $15 $28 $2D $36 $56 $5A $6E $79 $7A $7C $80 $82 $C4 $C5 $C6 $C7 $D2 
+
+Bank 33: $05 $11 $14 $1E $1F $20 $47 $4D $5B $79 $86 $C0 $C1 $C2 $C3 
+
+Bank 34: $00 $30 $33 $3B $3C $41 $4C $56 $5A $5C $6B $72 $79 $7C $CC 
+
+Bank 35: $00 $01 $03 $13 $56 $5C $67 $79 $7D $D9 $DA $DD 
+
+Bank 36: $06 $07 $08 $09 $0A $0B $0C $0D $0E $12 $18 $19 $1A $31 $49 $5A $6B $78 $79 
+
+Bank 37: $00 $31 $33 $34 $3C $42 $44 $4F $5A $6E $73 $79 $D3 $D4 
+
+Bank 38: $16 $17 $31 $33 $37 $38 $39 $3A $45 $4A $4D $5D $77 $78 $79 $7E $83 $87 $CD $CE $CF $D8 $E0 $E1 
+
+Bank 39: $2E $2F $31 $34 $46 $48 $4B $54 $56 $5A $5B $5C $68 $79 $D5 $D6 $D7 
+
+Bank 40: $02 $33 $48 $54 $56 $57 $58 $59 $6B $73 $7A $81 $84 $85 $DB $DC 
+
+Bank 41: $29 $2D $4E $54 $56 $5A $5C $61 $62 $63 $64 $65 $66 $6B $75 $76 $78 $7A $7C $81 $84 
+
+Bank 42: $1C $33 $49 $51 $52 $56 $69 $6A $72 $78 $7A $85 
+
+Bank 43: $02 $29 $33 $34 $4C $4E $51 $52 $56 $5A $5C $5E $5F $60 $72 $73 $7A $7C 
+
+Bank 44: $35 $3B $3C $42 $4A $56 $5A $6C $6D $78 $7A 
+
+Bank 45: $00 $1B $32 $4E $56 $5A $5C $67 $68 $6B $6E $6F $70 $71 $78 
+
+Bank 46: $2D $34 $50 $53 $55 $56 $5A $5B $74 $78 $79 $7A $7B $7C $DE $DF 
+
+Bank 47: $68 $7F 

@@ -1,0 +1,5 @@
+PRG025_A000:	.incchr "CHR/25_A000.pcx"
+PRG025_A800:	.incchr "CHR/25_A800.pcx"
+PRG025_AC00:	.incchr "CHR/25_AC00.pcx"
+PRG025_AF00:	.incchr "CHR/25_AF00.pcx"
+PRG025_B000:	.incchr "CHR/25_B000.pcx"
