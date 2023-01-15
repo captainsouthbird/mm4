@@ -11,5 +11,5 @@ I have no plans to do anything with it at this time, to finish up the gaps, or d
 
 To assemble, simply run:
 
-nesasm rom.asm
+nesasm mm4.asm
 
