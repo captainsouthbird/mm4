@@ -3165,7 +3165,7 @@ PRG056_B1C8:
 
 
 PRG056_B1D2:
-	JSR PRG063_ApplyYVelocityH16
+	JSR PRG063_ApplyYVelRev_BottomCutoff
 
 	LDA #$D0
 	CMP Spr_Y+$00,X

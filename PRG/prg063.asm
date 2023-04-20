@@ -1601,7 +1601,7 @@ PRG063_ObjMoveVert_HitFloor:
 	STA <Temp_Var3
 
 PRG063_F096:
-	JSR PRG063_ApplyYVelocityH16	; Apply Y velocity
+	JSR PRG063_ApplyYVelRev_BottomCutoff	; Apply Y velocity
 
 	CPX #$00	; $F099
 	BNE PRG063_F0B2	; $F09B
@@ -1627,8 +1627,8 @@ PRG063_F0B2:
 	JSR PRG062_ObjDetFloorAttrs	; $F0B2
 
 	CLC	; $F0B5
-	LDA <Temp_Var16	; $F0B6
-	AND #$10	; $F0B8
+	LDA <Temp_Var16		; almagamation result from PRG062_ObjDetFloorAttrs
+	AND #TILEATTR_SOLID
 	BEQ PRG063_F0C0	; $F0BA
 
 	JSR PRG062_ObjOffsetYToTileTop	; $F0BC
@@ -1654,7 +1654,7 @@ PRG063_DoObjVertMoveUpOnly:
 	STA <Temp_Var3
 
 PRG063_F0CF:
-	JSR PRG063_ApplyYVelocityNeg	; $F0CF
+	JSR PRG063_ApplyYVel_TopCutoff2	; $F0CF
 
 	CPX #$00	; $F0D2
 	BNE PRG063_F0E9	; $F0D4
@@ -1677,14 +1677,14 @@ PRG063_F0E3:
 
 
 PRG063_F0E9:
-	JSR PRG062_ObjDetFloorAttrs	; $F0E9
+	JSR PRG062_ObjDetFloorAttrs
 
-	CLC	; $F0EC
-	LDA <Temp_Var16	; $F0ED
-	AND #$10	; $F0EF
-	BEQ PRG063_F0F7	; $F0F1
+	CLC
+	LDA <Temp_Var16		; almagamation result from PRG062_ObjDetFloorAttrs
+	AND #TILEATTR_SOLID
+	BEQ PRG063_F0F7	; If not specifically solid, jump to PRG063_F0F7 (RTS)
 
-	JSR PRG062_ObjOffsetYToTileTopRev	; $F0F3
+	JSR PRG062_ObjOffsetYToTileTopRev
 
 	SEC	; $F0F6
 
@@ -1752,7 +1752,7 @@ PRG063_F120:
 	JSR PRG063_CopySprSlotSetAnim
 
 	LDA <Level_TileAttr_GreatestDet	; $F131
-	CMP #$60	; $F133
+	CMP #TILEATTR_WATER	; $F133
 	BEQ PRG063_F140	; $F135
 
 	; Splash Y += 16
@@ -1824,9 +1824,9 @@ PRG063_F174:
 
 
 PRG063_F17C:
-	; Y velocity < 0
+	; Y velocity < 0 (object is "falling")
 
-	JSR PRG063_ApplyYVelocityRevH16	; Apply velocity in reverse
+	JSR PRG063_ApplyYVel_BottomCutoff
 
 	CPX #$00
 	BNE PRG063_F1B0	; If this is not the Player, jump to PRG063_F1B0
@@ -1870,7 +1870,7 @@ PRG063_F1A8:
 
 
 PRG063_F1B0:
-	JSR PRG063_ApplyWaterPhys	; Apply water physics 
+	JSR PRG063_ObjApplyGravity
 
 	JSR PRG062_ObjDetFloorAttrs
 
@@ -1878,17 +1878,17 @@ PRG063_F1B0:
 	CMP #TILEATTR_LADDERTOP
 	BNE PRG063_F1C4	; If this is not the top of a ladder, jump to PRG063_F1C4
 
-	; Describe better: This is needed to "extend" the top of the ladder
-	LDA <Temp_Var17	; Player offset Y
+	; Essentially this makes the top of a ladder only solid for the first half
+	LDA <Temp_Var17	; Object offset Y (Spr_Y + Y offset from tile spread fed to PRG062_ObjDetFloorAttrs)
 	AND #$0F		; Relative within tile
 	CMP #$08	
-	BLT PRG063_F1F5	; If < 8, jump to PRG063_F1F5
+	BLT PRG063_F1F5	; If < 8 (upper half of ladder tope tile), jump to PRG063_F1F5 (treat as solid)
 
 
 PRG063_F1C4:
-	LDA <Temp_Var16		; Object offset X
-	AND #$10
-	BNE PRG063_F1F5		; If not on "right half" of meta block (?), jump to PRG063_F1F5
+	LDA <Temp_Var16		; The amalgamation of all attributes from PRG062_ObjDetFloorAttrs
+	AND #TILEATTR_SOLID
+	BNE PRG063_F1F5		; If solid floor not detected, jump to PRG063_F1F5
 
 	CPX #$00
 	BNE PRG063_F22B	; If this is not the Player, jump to PRG063_F22B
@@ -1933,10 +1933,10 @@ PRG063_F1FB:
 
 
 PRG063_F1FD:
-	; Y velocity >= 0
+	; Y velocity >= 0 (object is "rising")
 
 	INY	; Y++
-	JSR PRG063_ApplyYVelocityRev
+	JSR PRG063_ApplyYVel_TopCutoff
 
 	CPX #$00
 	BNE PRG063_F219	; If this is not the player object, jump to PRG063_F219
@@ -1962,7 +1962,7 @@ PRG063_F213:
 
 
 PRG063_F219:
-	JSR PRG063_ApplyWaterPhys	; Apply water physics 
+	JSR PRG063_ObjApplyGravity
 
 	JSR PRG062_ObjDetFloorAttrs	; $F21C
 
@@ -1978,8 +1978,8 @@ PRG063_F228:
 
 
 PRG063_F22B:
-	CLC	; $F22B
-	RTS	; $F22C
+	CLC	; Clear carry (no solid floor)
+	RTS	
 
 
 PRG063_ApplyXVelocity:
@@ -2020,7 +2020,9 @@ PRG063_F268:
 	RTS	; $F268
 
 
-PRG063_ApplyYVelocityH16:
+	; REVERSED version of PRG063_ApplyYVel_BottomCutoff
+	; i.e. Y velocity direction is reversed (normally positive moves up, but in this case it moves down)
+PRG063_ApplyYVelRev_BottomCutoff:
 	
 	; Apply Y velocity with fractional component
 	LDA Spr_YVelFracAccum+$00,X
@@ -2043,7 +2045,9 @@ PRG063_F288:
 	RTS	; $F288
 
 
-PRG063_ApplyYVelocityNeg:
+	; Applies Y Velocity to vertically move object, looking to see if they've crossed the upper vertical threshold of the screen
+	; NOTE: Appears to be exactly identical PRG063_ApplyYVel_TopCutoff, but called in different places
+PRG063_ApplyYVel_TopCutoff2:
 
 	; Apply Y velocity with fractional component in reverse
 	LDA Spr_YVelFracAccum+$00,X
@@ -2064,22 +2068,26 @@ PRG063_F2A6:
 	RTS	; $F2A6
 
 
+
+	; Simplified vertical movement which applies Y velocity, respects the vertical screen cut-off logic,
+	; and applies gravity afterwards
 PRG063_DoMoveSimpleVert:
 	LDA Spr_YVel+$00,X
 	BPL PRG063_F2B2
 
-	JSR PRG063_ApplyYVelocityRevH16	; $F2AC
+	JSR PRG063_ApplyYVel_BottomCutoff
 
-	JMP PRG063_ApplyWaterPhys
+	JMP PRG063_ObjApplyGravity
 
 
 PRG063_F2B2:
-	JSR PRG063_ApplyYVelocityRev	; $F2B2
+	JSR PRG063_ApplyYVel_TopCutoff
 
-	JMP PRG063_ApplyWaterPhys
+	JMP PRG063_ObjApplyGravity
 
 
-PRG063_ApplyYVelocityRevH16:
+	; Applies Y Velocity to vertically move object, looking to see if they've crossed the lower vertical threshold of the screen
+PRG063_ApplyYVel_BottomCutoff:
 
 	; Apply Y velocity with fractional component
 	LDA Spr_YVelFracAccum+$00,X
@@ -2102,9 +2110,11 @@ PRG063_F2D7:
 	RTS	; $F2D7
 
 
-PRG063_ApplyYVelocityRev:
+	; Applies Y Velocity to vertically move object, looking to see if they've crossed the upper vertical threshold of the screen
+	; NOTE: Appears to be exactly identical PRG063_ApplyYVel_TopCutoff2, but called in different places
+PRG063_ApplyYVel_TopCutoff:
 
-	; Apply Y velocity with fractional component in reverse
+	; Apply Y velocity with fractional component
 	LDA Spr_YVelFracAccum+$00,X
 	SUB Spr_YVelFrac+$00,X
 	STA Spr_YVelFracAccum+$00,X
@@ -2122,22 +2132,23 @@ PRG063_F2F5:
 	RTS	; $F2F5
 
 
-PRG063_ApplyWaterPhys:
+PRG063_ObjApplyGravity:
 	LDA <Player_WaterPhysFudge
-	BEQ PRG063_ApplyYVelRevAltYVel	; If Player_WaterPhysFudge = 0, jump to PRG063_ApplyYVelRevAltYVel
+	BEQ PRG063_ObjApplyGravity_Cont	; If Player_WaterPhysFudge = 0, jump to PRG063_ObjApplyGravity_Cont
 
 	CPX #$00
-	BNE PRG063_ApplyYVelRevAltYVel	; If this is not the Player, jump to PRG063_ApplyYVelRevAltYVel
+	BNE PRG063_ObjApplyGravity_Cont	; If this is not the Player, jump to PRG063_ObjApplyGravity_Cont
 
+	; Decrement Player_WaterPhysFudge, if not zero, then do not adjust player's Y velocity (causes "floatiness" in water)
 	DEC <Player_WaterPhysFudge
 	BNE PRG063_F323		; Jump (technically always) to PRG063_F323 (RTS)
 
 
-PRG063_ApplyYVelRevAltYVel:
+PRG063_ObjApplyGravity_Cont:
 
 	; Apply Y velocity with fractional component in reverse
 	LDA Spr_YVelFrac+$00,X
-	SUB <Player_AltYVelForWater
+	SUB <Gravity
 	STA Spr_YVelFrac+$00,X
 	LDA Spr_YVel+$00,X
 	SBC #$00
@@ -2404,13 +2415,13 @@ PRG063_DoMoveVertOnlyH16:
 
 	; Direction is down...
 
-	JMP PRG063_ApplyYVelocityH16	; Jump to PRG063_ApplyYVelocityH16
+	JMP PRG063_ApplyYVelRev_BottomCutoff	; Jump to PRG063_ApplyYVelRev_BottomCutoff
 
 
 PRG063_F442:
 	; Direction is up...
 
-	JMP PRG063_ApplyYVelocityNeg	; Jump to PRG063_ApplyYVelocityNeg
+	JMP PRG063_ApplyYVel_TopCutoff2	; Jump to PRG063_ApplyYVel_TopCutoff2
 
 
 PRG063_F445:

@@ -2288,7 +2288,7 @@ PRG058_Obj_TeleportOut:
 	LDA Spr_YVel+$00,X
 	ADC #$00
 	STA Spr_YVel+$00,X
-	JSR PRG063_ApplyYVelocityNeg
+	JSR PRG063_ApplyYVel_TopCutoff2
 
 	LDA Spr_YHi+$00,X
 	BEQ PRG058_8A85		; If object hasn't left screen, jump to PRG058_8A85 (RTS)
@@ -2542,7 +2542,7 @@ PRG058_Obj_ToadRainCanister:
 	STA Spr_YVel+$00,X
 
 PRG058_8BBF:
-	JSR PRG063_ApplyYVelocityNeg
+	JSR PRG063_ApplyYVel_TopCutoff2
 
 	LDA Spr_YHi+$00,X
 	BEQ PRG058_8BFA		; If not off-screen, jump to PRG058_8BFA (RTS)

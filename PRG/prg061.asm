@@ -2333,7 +2333,7 @@ PRG061_AC60:
 
 
 PRG061_Obj_Moby_BigSpike:
-	JSR PRG063_ApplyYVelocityNeg
+	JSR PRG063_ApplyYVel_TopCutoff2
 
 	LDA Spr_YHi+$00,X
 	BEQ PRG061_ACE6	; If not off-screen, jump to (RTS)
@@ -2423,7 +2423,7 @@ PRG061_Obj_Moby_LittleSpike:
 	STA Spr_Flags+$00,X
 
 PRG061_ACF9:
-	JMP PRG063_ApplyYVelocityH16
+	JMP PRG063_ApplyYVelRev_BottomCutoff
 
 PRG061_Obj55:
 	; CHECKME - UNUSED?

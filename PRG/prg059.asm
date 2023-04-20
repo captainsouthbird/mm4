@@ -679,7 +679,7 @@ PRG059_A398:
 	ADC #$00
 	STA Spr_YVel+$00,X
 	
-	JSR PRG063_ApplyYVelocityNeg
+	JSR PRG063_ApplyYVel_TopCutoff2
 
 	LDA Spr_YHi+$00,X
 	BEQ PRG059_A3B4	; If not off-screen, jump to PRG059_A3B4
@@ -1579,7 +1579,7 @@ PRG059_A86F:
 PRG059_Metall4_WaterMove:
 	; Note doing water movement
 	LDA #$15
-	STA <Player_AltYVelForWater
+	STA <Gravity
 	JSR PRG063_DoObjVertMovement
 
 	PHP	; Save status
@@ -1616,7 +1616,7 @@ PRG059_A89F:
 	PLP	; Restore status
 	
 	LDA #$40
-	STA <Player_AltYVelForWater
+	STA <Gravity
 	
 	RTS	; $A8A4
 
@@ -4062,7 +4062,7 @@ PRG059_B683:
 	RTS	; $B683
 
 PRG059_Obj_UpNDown_Cont:
-	JSR PRG063_ApplyYVelocityNeg
+	JSR PRG063_ApplyYVel_TopCutoff2
 
 	DEC Spr_Var1+$00,X	; Spr_Var1--
 	BNE PRG059_B683	; If Spr_Var1 > 0, jump to PRG059_B683 (RTS)
@@ -4093,7 +4093,7 @@ PRG059_Obj_UpNDown_Cont:
 
 
 PRG059_Obj_UpNDown_MoveUp:
-	JSR PRG063_ApplyYVelocityH16
+	JSR PRG063_ApplyYVelRev_BottomCutoff
 
 	; Save flags
 	LDA Spr_Flags+$00,X

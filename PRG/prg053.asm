@@ -1704,7 +1704,7 @@ PRG053_AA29:
 	LDA Spr_YVel+$00,X
 	ADC #$00
 	STA Spr_YVel+$00,X
-	JSR PRG063_ApplyYVelocityNeg
+	JSR PRG063_ApplyYVel_TopCutoff2
 
 	LDA Spr_YHi+$00,X
 	BEQ PRG053_AA51	; If not vertically off-screen, jump to PRG053_AA51 (RTS)
@@ -1778,7 +1778,7 @@ PRG053_AAB0:
 PRG053_WilyMachineFour_Lower:
 
 	; Move down
-	JSR PRG063_ApplyYVelocityH16
+	JSR PRG063_ApplyYVelRev_BottomCutoff
 
 	JSR PRG053_WM4_SetPosDecoAndScr
 
@@ -2338,7 +2338,7 @@ PRG053_Obj_WilyEscapePod:
 	LDA #$00
 	STA Spr_YVel+$00,X
 	
-	JSR PRG063_ApplyYVelocityH16
+	JSR PRG063_ApplyYVelRev_BottomCutoff
 	JSR PRG053_WM4_SetPosDecoAndScr
 
 	LDA <General_Counter
@@ -2413,7 +2413,7 @@ PRG053_AE25:
 	
 
 PRG053_WilyEscapePod_PostExpl:
-	JSR PRG063_ApplyYVelocityNeg
+	JSR PRG063_ApplyYVel_TopCutoff2
 
 	LDA Spr_YHi+$00,X
 	BEQ PRG053_AE7B	; If not vertically off-screen, jump to PRG053_AE7B (RTS)
@@ -3858,7 +3858,7 @@ PRG053_Obj_WilyCapsuleDie:
 	STA Spr_Flags+$00,X
 	
 PRG053_WilyCapsuleDie_Cont:
-	JSR PRG063_ApplyYVelocityNeg
+	JSR PRG063_ApplyYVel_TopCutoff2
 
 	LDA Spr_YHi+$00,X
 	BEQ PRG053_B696	; If not vertically off-screen, jump to PRG053_B696 (RTS)

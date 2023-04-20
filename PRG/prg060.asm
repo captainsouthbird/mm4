@@ -1400,7 +1400,7 @@ PRG060_867D:
 	LDA Spr_YVel+$00
 	ADC #$00
 	STA Spr_YVel+$00
-	JSR PRG063_ApplyYVelocityNeg
+	JSR PRG063_ApplyYVel_TopCutoff2
 
 	; Ticks until ending level
 	LDA #$78

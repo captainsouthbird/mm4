@@ -1166,9 +1166,9 @@ PRG062_C541:
 	; Fade out
 	JSR PRG062_PalFadeOut
 
-	; Player_AltYVelForWater = $40
+	; Gravity = $40
 	LDA #$40
-	STA <Player_AltYVelForWater
+	STA <Gravity
 	
 	; Reset sprites and sprite slots
 	LDA #$04

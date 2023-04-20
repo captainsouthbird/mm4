@@ -576,7 +576,7 @@ EndTrain_CurPalIndex	= CHRRAMDL_GBufDataLen		; Current palette during train endi
 	General_Counter:		.ds 1	 ; Free-running counter in level, also used on stage select to time the Dr. Cossack appearance flash
 	Spr_SlotIndex:		.ds 1	 ; $0096 Slot index for sprites ($00-$17)
 	Sprite_CurrentIndex:		.ds 2	 ; $0097 - $0098
-	Player_AltYVelForWater:		.ds 1	 ; Alternate velocity value applied when Player is underwater (to give the floaty effect)
+	Gravity:		.ds 1	 ; Current rate all objects are pulled down (usually $40, an underwater Metall sets it temporarily to $15)
 	DisFlag_NMIAndDisplay:		.ds 1	 ; Next NMI, the display and NMIs will be disabled
 	RasterSplit_En:		.ds 1	 ; 0 = Disable MMC3 raster split interrupt, 1 = enable (NOTE: MUST be 0 or 1 due to the way it's coded)
 	IntIRQ_FuncPtr_L:		.ds 1	 ; Low address for function executed on the scanline interrupt
@@ -2116,9 +2116,20 @@ TileLayout_Patterns			= $A000
 
 
 	; Tile attributes:
+	;
 	; These define essentially the "property" of the detected tile, and are prioritized
 	; in some checks (i.e. of all tiles detected from the last pass of the tile detect
 	; routines, the "greatest" attribute value from below is stored.)
+	;
+	; After calling a tile detection routine (which use a "spread" detection system of an array of offsets):
+	;
+	; 	Level_TileAttr_GreatestDet: "Greatest" of any of these detected
+	;
+	; 	Temp_Var16: "Amalgamation" of the upper 4 BITS of all of these detected
+	;		NOTE! A lot of times this is checked bit-wise even though it doesn't totally make sense,
+	;		e.g. the game will check for the "TILEATTR_SOLID" set in Temp_Var16, meaning any of the
+	;		following TILEATTRs with $10 set will also be treated as "SOLID" in some checks
+	;
 TILEATTR_UNSOLID			= $00	; Generally used as an empty/unsolid tile (for solidity mod routines)
 TILEATTR_SOLID				= $10	; Solid tile
 TILEATTR_LADDER				= $20	; Ladder tile (climbable, can not be stood on)
